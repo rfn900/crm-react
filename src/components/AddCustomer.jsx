@@ -34,7 +34,7 @@ export default function AddCustomer() {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        history.push("/");
+        history.push("/customers");
       });
   };
 
