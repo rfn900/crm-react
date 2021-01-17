@@ -14,7 +14,11 @@ const ButtonStyled = styled.button`
   }
   display: flex;
   align-items: center;
-
+  :disabled {
+    background: #666;
+    opacity: 0.4;
+    cursor: inherit;
+  }
   svg {
     margin-right: 5px;
     fill: white;

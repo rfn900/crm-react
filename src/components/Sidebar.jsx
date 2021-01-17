@@ -1,11 +1,9 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import PaymentOutlinedIcon from "@material-ui/icons/PaymentOutlined";
-import BookmarkOutlinedIcon from "@material-ui/icons/BookmarkOutlined";
 import GroupOutlinedIcon from "@material-ui/icons/GroupOutlined";
 import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
-import ArrowRightOutlinedIcon from "@material-ui/icons/ArrowRightOutlined";
+import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import { ListStyled, ListItemStyled } from "../styles/ListStyled";
 
 const SidebarContainerStyled = styled.div`
@@ -51,12 +49,6 @@ export default function Sidebar() {
     <SidebarContainerStyled>
       <ListStyled>
         <SidebarListItem>
-          <Link to="/">
-            <PaymentOutlinedIcon />
-            Next Payments
-          </Link>
-        </SidebarListItem>
-        <SidebarListItem>
           <Link to="/customer-count">
             <GroupOutlinedIcon />
             Number of Clients
@@ -64,14 +56,14 @@ export default function Sidebar() {
         </SidebarListItem>
         <SidebarListItem>
           <Link to="/account">
-            <BookmarkOutlinedIcon />
-            Bookmarked
+            <InfoOutlinedIcon />
+            Account Info
           </Link>
         </SidebarListItem>
         <SidebarListItem>
           <Link to="/admin">
             <HomeOutlinedIcon />
-            Admin
+            Home
           </Link>
         </SidebarListItem>
       </ListStyled>

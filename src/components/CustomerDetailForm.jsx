@@ -12,6 +12,7 @@ import { DashboardWrapperStyled } from "../styles/DashboardWrapperStyled";
 import { ButtonStyled } from "../styles/ButtonStyled";
 import { InputStyled } from "../styles/InputStyled";
 import { InputContainerStyled } from "../styles/InputContainerStyled";
+import { ErrorTabStyled } from "../styles/LoginPageStyled";
 
 const InputACStyled = styled(InputStyled)`
   margin-top: 10px;
@@ -36,9 +37,10 @@ export default function CustomerDetailForm({
   onSubmit,
   onChange,
   formData,
+  isButtonDisabled,
 }) {
   const renderInput = (name, label, Icon, type) => {
-    //console.log(formData[name], "bunda");
+    console.log(isButtonDisabled, "bunda");
     return (
       <InputContainerACStyled>
         <InputACStyled
@@ -73,7 +75,12 @@ export default function CustomerDetailForm({
         {renderInput("reference", "Reference", <DescriptionOutlinedIcon />)}
         {renderInput("vatNr", "VAT Number", <ShowChartIcon />)}
         {renderInput("website", "Website", <LanguageIcon />)}
-        <ButtonStyled type="submit">{title}</ButtonStyled>
+        {isButtonDisabled && (
+          <ErrorTabStyled>VAT must be of format: SE1234567890</ErrorTabStyled>
+        )}
+        <ButtonStyled disabled={isButtonDisabled} type="submit">
+          {title}
+        </ButtonStyled>
       </form>
       {/* {JSON.stringify(formData)} */}
     </ContainerACStyled>

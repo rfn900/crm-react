@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
 import SearchIcon from "@material-ui/icons/Search";
@@ -16,24 +16,45 @@ const CustomerListHeaderStyled = styled.div`
 `;
 
 export default function CustomerList() {
-  const { customerList } = useContext(CustomerContext);
+  const [customerList, setCustomerList] = useState([]);
   const [renderedCustomers, setRenderedCustomers] = useState(customerList);
-  const [searchField, setSearchField] = useState("");
 
   const location = useLocation();
-  const page = location.search ? location.search.split("=")[1] : 1;
-  const numberOfPages = Math.ceil(customerList.length / 5);
 
-  let paginationArray = [];
-  for (let i = 0; i < numberOfPages; i++) {
-    paginationArray.push(i + 1);
-  }
+  const getCostumerList = () => {
+    const url = "https://frebi.willandskill.eu/api/v1/customers/";
+    const token = localStorage.getItem("WEBB20");
+    fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setCustomerList(data.results);
+        console.log(data.results);
+      });
+  };
+  useEffect(() => {
+    getCostumerList();
+  }, []);
 
   const handleOnChange = (e) => {
-    setSearchField(e.target.value);
+    const newRender = customerList.filter((customer) => {
+      console.log(customer.name, e.target.value);
+      return customer.name.includes(e.target.value);
+    });
+
+    setRenderedCustomers(newRender);
+    console.log(newRender, customerList);
   };
 
-  console.log(numberOfPages);
+  useEffect(() => {
+    setRenderedCustomers(customerList);
+  }, [customerList]);
+
+  console.log(renderedCustomers);
   return (
     <DashboardWrapperStyled>
       <CustomerListHeaderStyled>
@@ -41,7 +62,7 @@ export default function CustomerList() {
         <InputContainerStyled>
           <InputStyled
             type="text"
-            placeholder="search"
+            placeholder="Search"
             onChange={handleOnChange}
           />
           <span className="email-span">
@@ -60,35 +81,21 @@ export default function CustomerList() {
           detailIcon="Edit"
           type="head"
         />
-        {renderedCustomers
-          .filter((customer) => customer.name.includes(searchField))
-          .filter((_, index) => index < 5 * page && index >= page * 5 - 5)
-          .map((customer, index) => {
-            return (
-              <>
-                <TableRow
-                  key={index}
-                  id={customer.id}
-                  orgNmr={customer.organisationNr}
-                  name={customer.name}
-                  paymentTerm={`on ${customer.paymentTerm} days`}
-                  website={customer.website}
-                  email={customer.email}
-                  detailIcon={<EditIcon />}
-                  type="notHead"
-                />
-              </>
-            );
-          })}
-      </div>
-      <div className="pagination">
-        {paginationArray.map((pageNmr, index) => {
-          const pageLink = (
-            <Link to={`/customers?page=${pageNmr}`}>{pageNmr}</Link>
-          );
-
+        {renderedCustomers.map((customer, index) => {
           return (
-            <span key={index}>{page == pageNmr ? pageNmr : pageLink}</span>
+            <>
+              <TableRow
+                key={index}
+                id={customer.id}
+                orgNmr={customer.organisationNr}
+                name={customer.name}
+                paymentTerm={`on ${customer.paymentTerm} days`}
+                website={customer.website}
+                email={customer.email}
+                detailIcon={<EditIcon />}
+                type="notHead"
+              />
+            </>
           );
         })}
       </div>

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import EditIcon from "@material-ui/icons/Edit";
 import { CustomerContext } from "../context/CustomerContext";
@@ -7,7 +7,27 @@ import { DashboardWrapperStyled } from "../styles/DashboardWrapperStyled";
 import { AdminCardContainer, AdminCardStyled } from "../styles/AdminCard";
 
 export default function Admin() {
-  const { customerList } = useContext(CustomerContext);
+  const [customerList, setCustomerList] = useState([]);
+  //const { customerList } = useContext(CustomerContext);
+  const getCostumerList = () => {
+    const url = "https://frebi.willandskill.eu/api/v1/customers/";
+    const token = localStorage.getItem("WEBB20");
+    fetch(url, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setCustomerList(data.results);
+        console.log(data.results);
+      });
+  };
+
+  useEffect(() => {
+    getCostumerList();
+  }, []);
 
   return (
     <DashboardWrapperStyled>

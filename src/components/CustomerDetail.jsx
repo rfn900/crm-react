@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import EditIcon from "@material-ui/icons/Edit";
+import { CustomerContext } from "../context/CustomerContext";
 import { DashboardWrapperStyled } from "../styles/DashboardWrapperStyled";
 import { ButtonStyled } from "../styles/ButtonStyled";
 
@@ -18,6 +19,7 @@ const CDWrapperStyled = styled(DashboardWrapperStyled)`
     tr {
       td {
         padding: 10px 20px;
+
         &:first-child {
           border-left: 1px solid #3a4145;
         }
@@ -29,10 +31,6 @@ const CDWrapperStyled = styled(DashboardWrapperStyled)`
         background: #3a4145;
         td {
           color: white;
-
-          a {
-            color: #ecf3f2;
-          }
         }
       }
     }
@@ -66,8 +64,10 @@ const AltButtonStyled = styled(ButtonStyled)`
 
 export default function CustomerDetail(props) {
   const customerId = props.match.params.id;
+  const { customerList, setCustomerList } = useContext(CustomerContext);
   const [customerItem, setCustomerItem] = useState(null);
   const history = useHistory();
+
   function getCostumerItem() {
     const url = `https://frebi.willandskill.eu/api/v1/customers/${customerId}/`;
     const token = localStorage.getItem("WEBB20");
@@ -83,6 +83,7 @@ export default function CustomerDetail(props) {
         console.log(data);
       });
   }
+
   const deleteCostumer = () => {
     if (!window.confirm("Are you sure you wish to delete this item?"))
       return -1;
@@ -134,7 +135,11 @@ export default function CustomerDetail(props) {
             </tr>
             <tr>
               <td>Email</td>
-              <td>{customerItem.email}</td>
+              <td>
+                <a href={`mailto:${customerItem.email}`} target="_blanck">
+                  {customerItem.email}
+                </a>
+              </td>
             </tr>
             <tr>
               <td>Website</td>

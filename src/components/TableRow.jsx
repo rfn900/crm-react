@@ -24,8 +24,24 @@ export default function TableRow({
       <div className="id-cell">{orgNmr}</div>
       <div>{name}</div>
       <div>{paymentTerm}</div>
-      <div>{website}</div>
-      <div>{email}</div>
+      <div>
+        {type === "notHead" ? (
+          <a href={website} target="_blanck">
+            {website}
+          </a>
+        ) : (
+          website
+        )}
+      </div>
+      <div>
+        {type === "notHead" ? (
+          <a href={`mailto:${email}`} target="_blanck">
+            {email}
+          </a>
+        ) : (
+          email
+        )}
+      </div>
       <span>
         {type === "notHead" ? (
           <Link to={`/customers/${id}/edit`}>{detailIcon}</Link>
